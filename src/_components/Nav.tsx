@@ -19,16 +19,6 @@ const NAVITEMS = [
   },
   {
     id: 3,
-    text: "Search",
-    href: "/search"
-  },
-  {
-    id: 4,
-    text: "About",
-    href: "/about"
-  },
-  {
-    id: 5,
     text: "Contact",
     href: "/contact",
   },

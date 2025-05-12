@@ -4,30 +4,15 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchChapterVerses } from "@/_lib/_api/api";
 import Link from "next/link";
-type Verse = {
-  id: string;
-  number: string;
-  content: string;
-  reference?: string;
-  bookId?: string;
-  chapterId?: string;
-};
+
+
 export default function ChapterPage() {
-  
   const params = useParams();
   const bibleId = params.bibleId as string;
   const bookId = params.bookId as string;
-  const chapterNumber = params.chapterNumber as string;
+  const chapterNumber = parseInt(params.chapterNumber as string, 10);
 
-  // Construct proper chapter ID (BOOK.CHAPTERNUMBER)
   const chapterId = `${bookId}.${chapterNumber}`;
-
-  console.log("Route Parameters:", {
-    bibleId,
-    bookId,
-    chapterNumber,
-    chapterId,
-  });
 
   const {
     data: verses = [],
@@ -43,13 +28,10 @@ export default function ChapterPage() {
     return (
       <div className="max-w-4xl mx-auto p-4">
         <div className="bg-white rounded-lg shadow p-6">
-          {/* Header Skeleton */}
           <div className="flex items-center justify-between mb-6">
             <div className="h-8 w-40 bg-gray-200 rounded animate-pulse"></div>
             <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
           </div>
-
-          {/* Verses Skeleton */}
           <div className="space-y-4">
             {[...Array(10)].map((_, i) => (
               <div key={i} className="flex gap-3">
@@ -65,10 +47,12 @@ export default function ChapterPage() {
       </div>
     );
   }
+
   if (error)
     return <div className="p-4 text-red-500">Error: {error.message}</div>;
 
-  console.log("Rendered Verses:", verses);
+  const nextChapter = chapterNumber + 1;
+  const previousChapter = chapterNumber - 1;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -87,7 +71,6 @@ export default function ChapterPage() {
 
         {verses.length > 0 ? (
           <div className="block space-y-4">
-            {/* Wrapper for each verse */}
             <div
               className="verse-content text-gray-700 space-y-4"
               dangerouslySetInnerHTML={{ __html: verses }}
@@ -96,6 +79,26 @@ export default function ChapterPage() {
         ) : (
           <div className="text-gray-500">No verses found for this chapter</div>
         )}
+
+        <div className="mt-10 flex justify-between">
+          {previousChapter > 0 ? (
+            <Link
+              href={`/browse-bible/${bibleId}/${bookId}/${previousChapter}`}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <div />
+          )}
+
+          <Link
+            href={`/browse-bible/${bibleId}/${bookId}/${nextChapter}`}
+            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+          >
+            Next →
+          </Link>
+        </div>
       </div>
     </div>
   );

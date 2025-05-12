@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Schema for an individual verse
 const VerseSchema = z.object({
   id: z.string(),
   orgId: z.string(),
@@ -26,7 +25,6 @@ const VerseSchema = z.object({
   content: z.string(),
 });
 
-// Schema for the verses data array
 const VersesDataSchema = z.object({
   data: z.array(VerseSchema),
   meta: z.object({
@@ -38,7 +36,6 @@ const VersesDataSchema = z.object({
   }),
 });
 
-// Schema for the full API response
 export const BibleChapterVersesResponseSchema = z.object({
   data: VersesDataSchema,
   meta: z.object({

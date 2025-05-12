@@ -32,31 +32,40 @@ interface XCircleIconProps {
   className?: string;
 }
 
-// Skeleton Loading Components (unchanged)
 const BibleDetailsSkeleton = () => (
-  <div className="flex-1 bg-white rounded-lg shadow p-6 space-y-4">
-    {/* ... unchanged skeleton code ... */}
+  <div className="flex-1 bg-white rounded-lg shadow p-6 space-y-4 animate-pulse">
+    <div className="h-8 w-24 bg-gray-200 rounded" />
+    <div className="h-6 w-48 bg-gray-200 rounded" />
+    <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="h-4 w-32 bg-gray-200 rounded" />
+      <div className="h-4 w-32 bg-gray-200 rounded" />
+      <div className="h-4 w-32 bg-gray-200 rounded" />
+      <div className="h-4 w-32 bg-gray-200 rounded" />
+    </div>
+    <div className="bg-gray-100 p-4 rounded space-y-2 mt-4">
+      <div className="h-4 w-3/4 bg-gray-200 rounded" />
+      <div className="h-4 w-full bg-gray-200 rounded" />
+      <div className="h-4 w-5/6 bg-gray-200 rounded" />
+    </div>
   </div>
 );
 
 const BooksListSkeleton = () => (
-  <div className="w-64 bg-white rounded-lg shadow p-4 space-y-3">
-    {/* ... unchanged skeleton code ... */}
+  <div className="w-full md:w-64 bg-white rounded-lg shadow p-4 space-y-3 animate-pulse">
+    <div className="h-6 w-1/2 bg-gray-200 rounded" />
+    {[...Array(8)].map((_, i) => (
+      <div key={i} className="h-4 w-full bg-gray-200 rounded" />
+    ))}
   </div>
 );
 
-const ChaptersGridSkeleton = () => (
-  <div className="absolute left-1/2 transform -translate-x-1/2 mt-4 w-full max-w-2xl bg-white rounded-lg shadow p-6 space-y-4">
-    {/* ... unchanged skeleton code ... */}
-  </div>
-);
+
 
 export default function BibleDetails() {
   const { bibleId } = useParams();
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const chaptersRef = useRef<HTMLDivElement>(null);
 
-  // Close chapters when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -73,7 +82,6 @@ export default function BibleDetails() {
     };
   }, []);
 
-  // Fetch Bible details
   const {
     data: bibles,
     error: bibleError,
@@ -84,7 +92,6 @@ export default function BibleDetails() {
     enabled: !!bibleId,
   });
 
-  // Fetch books
   const {
     data: books,
     error: booksError,
@@ -95,7 +102,6 @@ export default function BibleDetails() {
     enabled: !!bibleId,
   });
 
-  // Combined loading state
   const isLoading = isBibleLoading || isBooksLoading;
 
   if (isLoading) {
@@ -115,7 +121,6 @@ export default function BibleDetails() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 flex flex-col md:flex-row gap-6 relative">
-      {/* Bible Details - Now properly included */}
       <div className="w-full md:flex-1 bg-white rounded-lg shadow p-6 space-y-4">
         <div className="flex items-start flex-col gap-4">
           <div className="bg-blue-50 rounded-lg p-3 text-center min-w-16">
@@ -157,7 +162,6 @@ export default function BibleDetails() {
         </div>
       </div>
 
-      {/* Books List */}
       <div className="w-full md:w-64 bg-white rounded-lg shadow p-4 order-1 md:order-none">
         <h2 className="font-bold text-lg mb-4">Books</h2>
         <div className="space-y-2">
@@ -172,7 +176,6 @@ export default function BibleDetails() {
         </div>
       </div>
 
-      {/* Chapters Grid */}
       {selectedBook && selectedBook.chapters && (
         <div
           ref={chaptersRef}
@@ -195,7 +198,7 @@ export default function BibleDetails() {
                 key={chapter.id}
                 bibleId={bibleId as string}
                 bookId={selectedBook.id}
-                chapter={chapter} // Pass the full chapter object
+                chapter={chapter} 
               />
             ))}
           </div>

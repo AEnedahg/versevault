@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Define the Chapter schema
 const ChapterSchema = z.object({
   id: z.string(),
   bibleId: z.string(),
@@ -9,7 +8,6 @@ const ChapterSchema = z.object({
   reference: z.string(),
 });
 
-// Define the Book schema
 const BookSchema = z.object({
   id: z.string(),
   bibleId: z.string(),
